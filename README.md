@@ -97,4 +97,3 @@ Authentication is backend-driven. Provider controls report a controlled unavaila
 Unexpected failures are logged to `%LOCALAPPDATA%\Horizon\Logs` with the application version, current page, operation, stack trace, and inner exceptions. Expected authentication and validation failures are contained by the sign-in view and leave Horizon responsive.
 
 Inter and Anton are embedded under the SIL Open Font License; Material Symbols is embedded under Apache License 2.0. Attribution is retained in `assets/fonts`.
-"# Horizon-Tweakss" 
