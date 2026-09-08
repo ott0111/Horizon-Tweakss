@@ -1,0 +1,31 @@
+{
+  "fileKey": "byDfuA905mGTYI0bbDql4m",
+  "fileName": "Horizon",
+  "updatedAt": "2026-08-13",
+  "sourceOfTruth": "figma",
+  "components": {
+    "statusBadge": "21:29",
+    "sidebarItem": "15:28",
+    "dropdown": "50:73",
+    "recommendationCard": "75:76",
+    "filterPanel": "76:56"
+  },
+  "screens": {
+    "recommendationsList": "29:2",
+    "allTweaks": "32:2",
+    "allTweaksFilterOverlay": "81:15",
+    "cleanupReady": "35:405",
+    "cleanupScanning": "86:51",
+    "cleanupCleaning": "86:162",
+    "cleanupComplete": "86:273",
+    "cleanupError": "86:383",
+    "statesFeedback": "42:2"
+  },
+  "decisions": [
+    "Keep Horizon monochrome-first with restrained semantic success, warning, and danger accents.",
+    "Use content-hugging status badges and horizontal auto-layout for metadata rows.",
+    "Use Search, Category, and FILTER on All Tweaks; place Risk, Status, and quick filters inside a centered overlay.",
+    "Allow exactly one selected sidebar destination when the screen maps to navigation; allow none for Profile and Devices.",
+    "Show Error in the cleanup state rail only on the dedicated Error screen."
+  ]
+}

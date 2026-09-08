@@ -1,0 +1,105 @@
+<UserControl x:Class="Horizon.App.Views.RecommendationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="RecommendationStatusBorder" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource Brush.Success}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status.State}" Value="AdminRequired">
+                    <Setter Property="BorderBrush" Value="{StaticResource Brush.Warning}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="RecommendationStatusText" TargetType="TextBlock">
+            <Setter Property="Text" Value="AVAILABLE" />
+            <Setter Property="Foreground" Value="{StaticResource Brush.Success}" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status.State}" Value="AdminRequired">
+                    <Setter Property="Text" Value="ADMIN REQUIRED" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Warning}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <Grid Style="{StaticResource PageShellWide}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource Heading1}" />
+                    <TextBlock Text="Changes chosen for this PC." Style="{StaticResource BodyText}" Margin="0,8,0,0" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Summary}" Style="{StaticResource BodyText}" HorizontalAlignment="Right" />
+                    <Button Style="{StaticResource PrimaryButton}"
+                            Content="APPLY SAFE RECOMMENDATIONS"
+                            Command="{Binding ApplyAllCommand}"
+                            Margin="0,12,0,0"
+                            AutomationProperties.Name="Apply safe recommendations" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,32,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="RECOMMENDATION" Style="{StaticResource Eyebrow}" />
+                <TextBlock Grid.Column="1" Text="STATUS" Style="{StaticResource Eyebrow}" />
+                <TextBlock Grid.Column="2" Text="ACTION" Style="{StaticResource Eyebrow}" HorizontalAlignment="Right" />
+            </Grid>
+
+            <Border Grid.Row="2" Style="{StaticResource Card}" Padding="4">
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,0,1" Padding="20,18">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="0,0,24,0">
+                                        <TextBlock Text="{Binding Definition.Name}" FontSize="15" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Definition.Description}"
+                                                   Style="{StaticResource BodyText}"
+                                                   Margin="0,6,0,0"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <Border Grid.Column="1"
+                                            Style="{StaticResource RecommendationStatusBorder}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="10,5"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Style="{StaticResource RecommendationStatusText}" />
+                                    </Border>
+                                    <Button Grid.Column="2"
+                                            Style="{StaticResource GhostButton}"
+                                            MinWidth="88"
+                                            Height="36"
+                                            Content="APPLY"
+                                            Command="{Binding DataContext.ApplyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            AutomationProperties.Name="{Binding Definition.Name, StringFormat=Apply {0}}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

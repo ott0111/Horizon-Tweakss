@@ -1,0 +1,44 @@
+<Application x:Class="Horizon.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:Horizon.App.ViewModels"
+             xmlns:views="clr-namespace:Horizon.App.Views"
+             xmlns:local="clr-namespace:Horizon.App"
+             ShutdownMode="OnExplicitShutdown">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Theme.Dark.xaml" />
+                <ResourceDictionary Source="Resources/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility" />
+            <local:EqualityConverter x:Key="EqualityConverter" />
+            <local:EnumToVisibilityConverter x:Key="EnumToVisibility" />
+            <local:StatusBrushConverter x:Key="StatusBrushConverter" />
+            <local:MaterialIconConverter x:Key="MaterialIconConverter" />
+            <DataTemplate DataType="{x:Type viewModels:SignInViewModel}"><views:SignInView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:SignUpViewModel}"><views:SignUpView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ForgotPasswordViewModel}"><views:ForgotPasswordView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ResetPasswordViewModel}"><views:ResetPasswordView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:OnboardingViewModel}"><views:OnboardingView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ShellViewModel}"><views:ShellView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}"><views:DashboardView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:RecommendationsViewModel}"><views:RecommendationsView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:TweaksViewModel}"><views:TweaksView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:FortniteViewModel}"><views:FortniteView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:DebloatViewModel}"><views:DebloatView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:StartupViewModel}"><views:StartupView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:CleanupViewModel}"><views:CleanupView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:SystemViewModel}"><views:SystemView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:CompatibilityViewModel}"><views:CompatibilityView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:BenchmarkViewModel}"><views:BenchmarkView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:RestoreViewModel}"><views:RestoreView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:HistoryViewModel}"><views:HistoryView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:PlanViewModel}"><views:PlanView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}"><views:SettingsView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:SupportViewModel}"><views:SupportView /></DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ProfileViewModel}"><views:ProfileView /></DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

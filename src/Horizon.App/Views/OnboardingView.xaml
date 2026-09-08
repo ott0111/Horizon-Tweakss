@@ -1,0 +1,201 @@
+<UserControl x:Class="Horizon.App.Views.OnboardingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="SetupStepItem" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource Brush.TextMuted}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Chrome" Background="Transparent" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="3" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                <Border x:Name="Indicator" Background="Transparent" CornerRadius="2" />
+                                <ContentPresenter Grid.Column="1" Margin="11,0,0,0" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource Brush.Selected}" />
+                                <Setter TargetName="Indicator" Property="Background" Value="{StaticResource Brush.TextPrimary}" />
+                                <Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="OnboardingTitle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Font.Inter}" />
+            <Setter Property="FontSize" Value="38" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="LineHeight" Value="46" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Step}" Value="0">
+                    <Setter Property="FontFamily" Value="{StaticResource Font.Anton}" />
+                    <Setter Property="FontSize" Value="54" />
+                    <Setter Property="FontWeight" Value="Normal" />
+                    <Setter Property="LineHeight" Value="60" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Step}" Value="5">
+                    <Setter Property="FontFamily" Value="{StaticResource Font.Anton}" />
+                    <Setter Property="FontSize" Value="50" />
+                    <Setter Property="FontWeight" Value="Normal" />
+                    <Setter Property="LineHeight" Value="58" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource Brush.App}">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="286" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+
+        <Border Background="{StaticResource Brush.Sidebar}" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,1,0">
+            <Grid Margin="28,26">
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="40" Height="40" Background="#F7F5EE" CornerRadius="11"><Image Source="/Assets/branding/horizon-mark.png" Margin="8" /></Border>
+                    <TextBlock Text="HORIZON" FontSize="17" FontWeight="Bold" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Margin="0,44,0,18">
+                    <TextBlock Text="{Binding Progress}" Style="{StaticResource Eyebrow}" />
+                    <ProgressBar Maximum="6" Value="{Binding ProgressValue, Mode=OneWay}" Height="3" Margin="0,12,0,0"
+                                 Foreground="White" Background="{StaticResource Brush.Border}" />
+                </StackPanel>
+                <ListBox Grid.Row="2" ItemsSource="{Binding StepNames}" SelectedIndex="{Binding Step, Mode=OneWay}"
+                         ItemContainerStyle="{StaticResource SetupStepItem}" Background="Transparent" BorderThickness="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                <Button Grid.Row="3" Content="SKIP FOR NOW" Style="{StaticResource GhostButton}" Command="{Binding SkipCommand}"
+                        HorizontalAlignment="Left" MinWidth="0" Padding="0,8" AutomationProperties.Name="Skip onboarding for now" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="76" /></Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                <Grid Margin="64,44,64,36" MaxWidth="900" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Border Width="54" Height="54" Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.BorderStrong}" BorderThickness="1" CornerRadius="14">
+                            <TextBlock Text="{Binding Icon}" FontFamily="{StaticResource Font.Material}" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="20,-2,0,0">
+                            <TextBlock Text="{Binding Eyebrow}" Style="{StaticResource Eyebrow}" />
+                            <TextBlock Text="{Binding Title}" Style="{StaticResource OnboardingTitle}" Margin="0,8,0,0" />
+                            <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" FontSize="15" LineHeight="24" MaxWidth="700" HorizontalAlignment="Left" Margin="0,10,0,0" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="74,32,0,0">
+                        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumToVisibility}, ConverterParameter=0}">
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" Padding="0,22,0,0" MaxWidth="680" HorizontalAlignment="Left">
+                                <UniformGrid Columns="3">
+                                    <StackPanel Margin="0,0,24,0"><TextBlock Text="&#xE86C;" FontFamily="{StaticResource Font.Material}" FontSize="20" Foreground="{StaticResource Brush.Success}" /><TextBlock Text="Personal recommendations" FontWeight="SemiBold" Margin="0,9,0,0" /><TextBlock Text="Matched to this PC" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel>
+                                    <StackPanel Margin="0,0,24,0"><TextBlock Text="&#xE9F8;" FontFamily="{StaticResource Font.Material}" FontSize="20" Foreground="{StaticResource Brush.Success}" /><TextBlock Text="Safe restore" FontWeight="SemiBold" Margin="0,9,0,0" /><TextBlock Text="Undo supported changes" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel>
+                                    <StackPanel><TextBlock Text="&#xEA28;" FontFamily="{StaticResource Font.Material}" FontSize="20" Foreground="{StaticResource Brush.Success}" /><TextBlock Text="Gaming profiles" FontWeight="SemiBold" Margin="0,9,0,0" /><TextBlock Text="Ready when games launch" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel>
+                                </UniformGrid>
+                            </Border>
+                        </StackPanel>
+
+                        <Grid Visibility="{Binding Step, Converter={StaticResource EnumToVisibility}, ConverterParameter=1}" MaxWidth="720" HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="190" /><ColumnDefinition Width="28" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <Grid Width="138" Height="138" HorizontalAlignment="Left">
+                                    <Ellipse Fill="{StaticResource Brush.Surface}" Stroke="{StaticResource Brush.BorderStrong}" StrokeThickness="1" />
+                                    <TextBlock Text="{Binding Initials}" FontSize="38" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Ellipse Visibility="{Binding HasProfilePhoto, Converter={StaticResource BooleanToVisibility}}">
+                                        <Ellipse.Fill><ImageBrush ImageSource="{Binding ProfileImage}" Stretch="UniformToFill" /></Ellipse.Fill>
+                                    </Ellipse>
+                                </Grid>
+                                <Button Content="UPLOAD PHOTO" Style="{StaticResource SecondaryButton}" Command="{Binding UploadPhotoCommand}" HorizontalAlignment="Left" MinWidth="138" Height="38" Margin="0,14,0,0" />
+                                <Button Content="USE PROVIDER PHOTO" Style="{StaticResource GhostButton}" Command="{Binding UseProviderPhotoCommand}" HorizontalAlignment="Left" MinWidth="0" Height="34" Padding="0,6" Margin="0,3,0,0" />
+                                <Button Content="REMOVE PHOTO" Style="{StaticResource GhostButton}" Command="{Binding RemovePhotoCommand}" HorizontalAlignment="Left" MinWidth="0" Height="34" Padding="0,6" Foreground="{StaticResource Brush.TextMuted}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="DISPLAY NAME" Style="{StaticResource Eyebrow}" />
+                                <TextBox Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextInput}" Margin="0,8,0,0" MaxLength="80" AutomationProperties.Name="Display name" />
+                                <TextBlock Text="PREVIEW" Style="{StaticResource Eyebrow}" Margin="0,22,0,0" />
+                                <Border Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="9" Padding="12" Margin="0,8,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Width="34" Height="34">
+                                            <Ellipse Fill="{StaticResource Brush.Elevated}" />
+                                            <TextBlock Text="{Binding Initials}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <Ellipse Visibility="{Binding HasProfilePhoto, Converter={StaticResource BooleanToVisibility}}">
+                                                <Ellipse.Fill><ImageBrush ImageSource="{Binding ProfileImage}" Stretch="UniformToFill" /></Ellipse.Fill>
+                                            </Ellipse>
+                                        </Grid>
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Visibility="{Binding IsProfileStatusVisible, Converter={StaticResource BooleanToVisibility}}" BorderBrush="{StaticResource Brush.Warning}" BorderThickness="3,0,0,0" Padding="12,9" Margin="0,14,0,0"><TextBlock Text="{Binding ProfileStatus}" Style="{StaticResource CaptionText}" /></Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumToVisibility}, ConverterParameter=2}" MaxWidth="760" HorizontalAlignment="Left">
+                            <Grid Margin="0,0,0,14"><TextBlock Text="{Binding ScanStatus}" FontWeight="SemiBold" /><Button Content="SCAN AGAIN" Style="{StaticResource GhostButton}" Command="{Binding ScanCommand}" HorizontalAlignment="Right" Height="32" MinWidth="0" Padding="10,4" /></Grid>
+                            <Border Style="{StaticResource Card}" Padding="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                                    <StackPanel Margin="16,13"><TextBlock Text="WINDOWS" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding Snapshot.WindowsEdition}" FontWeight="SemiBold" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" /></StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="16,13"><TextBlock Text="CPU" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding Snapshot.Cpu}" FontWeight="SemiBold" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" ToolTip="{Binding Snapshot.Cpu}" /></StackPanel>
+                                    <StackPanel Grid.Row="1" Margin="16,13"><TextBlock Text="GPU" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding Snapshot.Gpu}" FontWeight="SemiBold" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" ToolTip="{Binding Snapshot.Gpu}" /></StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="16,13"><TextBlock Text="MEMORY" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding Snapshot.Ram}" FontWeight="SemiBold" Margin="0,5,0,0" /></StackPanel>
+                                    <StackPanel Grid.Row="2" Margin="16,13"><TextBlock Text="STORAGE" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding StorageSummary}" FontWeight="SemiBold" Margin="0,5,0,0" /></StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="16,13"><TextBlock Text="NETWORK" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding Snapshot.NetworkAdapter}" FontWeight="SemiBold" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" ToolTip="{Binding Snapshot.NetworkAdapter}" /></StackPanel>
+                                    <StackPanel Grid.Row="3" Margin="16,13"><TextBlock Text="SUPPORTED GAMES" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding GamesSummary}" FontWeight="SemiBold" Margin="0,5,0,0" /></StackPanel>
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="16,13"><TextBlock Text="MATCHES" Style="{StaticResource Eyebrow}" /><TextBlock Text="{Binding RecommendationSummary}" FontWeight="SemiBold" Margin="0,5,0,0" /></StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumToVisibility}, ConverterParameter=3}" MaxWidth="700" HorizontalAlignment="Left">
+                            <Border Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="12" Padding="22">
+                                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Border Width="38" Height="38" Background="{StaticResource Brush.Elevated}" CornerRadius="10"><TextBlock Text="&#xE9F8;" FontFamily="{StaticResource Font.Material}" FontSize="21" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border><StackPanel Grid.Column="1" Margin="14,0,0,0"><TextBlock Text="Protection before optimization" FontSize="16" FontWeight="Bold" /><TextBlock Text="Horizon keeps a restore record for supported settings before it changes them." Style="{StaticResource BodyText}" Margin="0,5,0,0" /></StackPanel></Grid>
+                            </Border>
+                            <StackPanel Margin="0,18,0,0">
+                                <Grid Margin="0,9"><TextBlock Text="Restore data" FontWeight="SemiBold" /><TextBlock Text="{Binding RestoreDataStatus}" HorizontalAlignment="Right" Foreground="{StaticResource Brush.TextSecondary}" /></Grid>
+                                <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" />
+                                <Grid Margin="0,9"><TextBlock Text="Change history" FontWeight="SemiBold" /><TextBlock Text="Ready" HorizontalAlignment="Right" Foreground="{StaticResource Brush.TextSecondary}" /></Grid>
+                                <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" />
+                                <Grid Margin="0,9"><TextBlock Text="Windows restore point" FontWeight="SemiBold" /><TextBlock Text="{Binding RestorePointStatus}" HorizontalAlignment="Right" Foreground="{StaticResource Brush.TextSecondary}" /></Grid>
+                            </StackPanel>
+                            <Border Background="{StaticResource Brush.Elevated}" CornerRadius="8" Padding="12,10" Margin="0,16,0,0"><TextBlock Text="{Binding ProtectionStatus}" FontWeight="SemiBold" Foreground="{Binding ProtectionTone, Converter={StaticResource StatusBrushConverter}}" /></Border>
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumToVisibility}, ConverterParameter=4}" MaxWidth="700" HorizontalAlignment="Left">
+                            <Grid Margin="0,0,0,14"><StackPanel><TextBlock Text="Detect supported games" FontWeight="SemiBold" /><TextBlock Text="Find installed games automatically." Style="{StaticResource CaptionText}" Margin="0,3,70,0" /></StackPanel><ToggleButton IsChecked="{Binding DetectGames}" Style="{StaticResource SwitchToggle}" HorizontalAlignment="Right" /></Grid>
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" />
+                            <Grid Margin="0,14"><StackPanel><TextBlock Text="Activate gaming optimization" FontWeight="SemiBold" /><TextBlock Text="Use temporary settings when a supported game starts." Style="{StaticResource CaptionText}" Margin="0,3,70,0" /></StackPanel><ToggleButton IsChecked="{Binding AutomaticGaming}" Style="{StaticResource SwitchToggle}" HorizontalAlignment="Right" /></Grid>
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" />
+                            <Grid Margin="0,14"><StackPanel><TextBlock Text="Restore settings when games close" FontWeight="SemiBold" /><TextBlock Text="Return temporary settings to their previous values." Style="{StaticResource CaptionText}" Margin="0,3,70,0" /></StackPanel><ToggleButton IsChecked="{Binding RestoreAfterGaming}" Style="{StaticResource SwitchToggle}" HorizontalAlignment="Right" /></Grid>
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumToVisibility}, ConverterParameter=5}" MaxWidth="680" HorizontalAlignment="Left">
+                            <Grid Margin="0,8"><TextBlock Text="&#xE86C;" FontFamily="{StaticResource Font.Material}" FontSize="19" Foreground="{StaticResource Brush.Success}" /><StackPanel Margin="32,0,0,0"><TextBlock Text="PC detected" FontWeight="SemiBold" /><TextBlock Text="{Binding ReadyPc}" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel></Grid>
+                            <Grid Margin="0,12"><TextBlock Text="&#xE86C;" FontFamily="{StaticResource Font.Material}" FontSize="19" Foreground="{StaticResource Brush.Success}" /><StackPanel Margin="32,0,0,0"><TextBlock Text="Optimizations found" FontWeight="SemiBold" /><TextBlock Text="{Binding ReadyOptimisations}" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel></Grid>
+                            <Grid Margin="0,12"><TextBlock Text="&#xE86C;" FontFamily="{StaticResource Font.Material}" FontSize="19" Foreground="{StaticResource Brush.Success}" /><StackPanel Margin="32,0,0,0"><TextBlock Text="Protection" FontWeight="SemiBold" /><TextBlock Text="{Binding ReadyProtection}" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel></Grid>
+                            <Grid Margin="0,12"><TextBlock Text="&#xE86C;" FontFamily="{StaticResource Font.Material}" FontSize="19" Foreground="{StaticResource Brush.Success}" /><StackPanel Margin="32,0,0,0"><TextBlock Text="Games" FontWeight="SemiBold" /><TextBlock Text="{Binding ReadyGames}" Style="{StaticResource CaptionText}" Margin="0,3,0,0" /></StackPanel></Grid>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+
+            <Border Grid.Row="1" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0">
+                <Grid Margin="64,14" MaxWidth="900" HorizontalAlignment="Center">
+                    <Button Content="BACK" Style="{StaticResource SecondaryButton}" Command="{Binding BackCommand}" HorizontalAlignment="Left" IsEnabled="{Binding CanGoBack}" MinWidth="104" />
+                    <Button Content="{Binding PrimaryLabel}" Style="{StaticResource PrimaryButton}" Command="{Binding NextCommand}" HorizontalAlignment="Right" MinWidth="172" AutomationProperties.Name="{Binding PrimaryLabel}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

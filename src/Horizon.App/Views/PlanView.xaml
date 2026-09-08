@@ -1,0 +1,81 @@
+<UserControl x:Class="Horizon.App.Views.PlanView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="PlanCard" TargetType="Border" BasedOn="{StaticResource Card}">
+            <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
+            <Setter Property="Padding" Value="26" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Width" Value="330" />
+            <Setter Property="MinHeight" Value="380" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Recommended}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Brush.Elevated}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource Brush.Success}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="PlanActionButton" TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+            <Setter Property="ContentTemplate" Value="{StaticResource ButtonTextContent}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Recommended}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Brush.PrimaryAction}" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.PrimaryActionText}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="PlanOptionTemplate">
+            <Border Style="{StaticResource PlanCard}">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                    <StackPanel>
+                        <Border Visibility="{Binding Recommended, Converter={StaticResource BooleanToVisibility}}" BorderBrush="{StaticResource Brush.Success}" BorderThickness="1" CornerRadius="6" Padding="10,5" HorizontalAlignment="Left" Margin="0,0,0,16">
+                            <TextBlock Text="RECOMMENDED" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource Brush.Success}" />
+                        </Border>
+                        <TextBlock Text="{Binding Name}" FontSize="21" FontWeight="Bold" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding Price}" FontSize="36" FontWeight="Bold" Margin="0,18,0,0" />
+                        <TextBlock Text="ONE-TIME" Style="{StaticResource Eyebrow}" Margin="0,3,0,0" />
+                        <TextBlock Text="{Binding Description}" Style="{StaticResource BodyText}" Margin="0,8,0,22" />
+                        <ItemsControl ItemsSource="{Binding Features}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="20" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="&#xE5CA;" FontFamily="{StaticResource Font.Material}" Foreground="{StaticResource Brush.Success}" FontSize="18" />
+                                        <TextBlock Grid.Column="1" Text="{Binding}" Margin="8,0,0,0" FontSize="13" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                    <Button Grid.Row="1" Style="{StaticResource PlanActionButton}" Content="SELECT" Command="{Binding DataContext.PurchaseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding ProductId}" Margin="0,20,0,0" AutomationProperties.Name="{Binding Name, StringFormat=Select {0}}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <Grid Style="{StaticResource PageShellWide}">
+            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="{Binding Title}" Style="{StaticResource Heading1}" HorizontalAlignment="Center" />
+                <TextBlock Text="Choose the one-time package that fits your PC." Style="{StaticResource BodyText}" Margin="0,8,0,0" HorizontalAlignment="Center" />
+            </StackPanel>
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding PrimaryPlans}" ItemTemplate="{StaticResource PlanOptionTemplate}" Margin="0,34,0,0">
+                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <StackPanel Grid.Row="2" Margin="8,42,8,12">
+                <TextBlock Text="Additional services" Style="{StaticResource Heading2}" />
+                <TextBlock Text="Add a focused one-time service without changing your Horizon package." Style="{StaticResource BodyText}" Margin="0,6,0,0" />
+            </StackPanel>
+
+            <ItemsControl Grid.Row="3" ItemsSource="{Binding AdditionalPlans}" ItemTemplate="{StaticResource PlanOptionTemplate}">
+                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel HorizontalAlignment="Center" /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

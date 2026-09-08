@@ -1,0 +1,214 @@
+<UserControl x:Class="Horizon.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="SettingRow" TargetType="Grid">
+            <Setter Property="Margin" Value="0,0,0,24" />
+        </Style>
+        <Style x:Key="SettingName" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style x:Key="SettingCopy" TargetType="TextBlock" BasedOn="{StaticResource BodyText}">
+            <Setter Property="Margin" Value="0,5,72,0" />
+        </Style>
+        <Style x:Key="SectionCard" TargetType="Border" BasedOn="{StaticResource Card}">
+            <Setter Property="Padding" Value="24" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Style="{StaticResource PageShell}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <StackPanel>
+                <TextBlock Text="{Binding Title}" Style="{StaticResource Heading1}" />
+                <TextBlock Text="Choose how Horizon works for you." Style="{StaticResource BodyText}" Margin="0,8,0,0" />
+            </StackPanel>
+            <Button Style="{StaticResource PrimaryButton}"
+                    Content="SAVE CHANGES"
+                    Command="{Binding SaveCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    AutomationProperties.Name="Save settings" />
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,32,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="190" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <ItemsControl ItemsSource="{Binding Sections}" Margin="0,0,26,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource GhostButton}"
+                                Height="40"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding}"
+                                Command="{Binding DataContext.SelectSectionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding}"
+                                Margin="0,0,0,4"
+                                AutomationProperties.Name="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="{Binding Section}" Style="{StaticResource Heading2}" Margin="0,0,0,18" />
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=General}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <StackPanel>
+                                    <TextBlock Text="Launch with Windows" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Open Horizon when you sign in to Windows." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.LaunchWithWindows}" HorizontalAlignment="Right" AutomationProperties.Name="Launch with Windows" />
+                            </Grid>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <StackPanel>
+                                    <TextBlock Text="Minimize to tray" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Keep Horizon running when you close the window." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.MinimizeToTray}" HorizontalAlignment="Right" AutomationProperties.Name="Minimize to tray" />
+                            </Grid>
+                            <TextBlock Text="Language" Style="{StaticResource SettingName}" />
+                            <ComboBox Style="{StaticResource ComboInput}"
+                                      SelectedValue="{Binding Settings.Language}"
+                                      SelectedValuePath="Content"
+                                      Margin="0,9,0,0"
+                                      AutomationProperties.Name="Language">
+                                <ComboBoxItem Content="English" />
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Optimization}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <StackPanel>
+                                    <TextBlock Text="Keep restore history" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Remember supported settings so you can restore them later." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.RecordPreviousValues}" HorizontalAlignment="Right" AutomationProperties.Name="Keep restore history" />
+                            </Grid>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <StackPanel>
+                                    <TextBlock Text="Create a restore point" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Create a Windows restore point before larger groups of changes." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.CreateRestorePoint}" HorizontalAlignment="Right" AutomationProperties.Name="Create a restore point" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Gaming}">
+                        <StackPanel>
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Automatic gaming mode" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Use Horizon's temporary Fortnite settings while the game is running, then restore them when it closes." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.AutomaticTemporaryProfile}" HorizontalAlignment="Right" AutomationProperties.Name="Automatic gaming mode" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Notifications}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <TextBlock Text="Optimization complete" Style="{StaticResource SettingName}" />
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.NotifyOptimizationComplete}" HorizontalAlignment="Right" AutomationProperties.Name="Optimization complete notifications" />
+                            </Grid>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <TextBlock Text="Game profile activated" Style="{StaticResource SettingName}" />
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.NotifyGameProfileActivated}" HorizontalAlignment="Right" AutomationProperties.Name="Game profile notifications" />
+                            </Grid>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <TextBlock Text="Restart required" Style="{StaticResource SettingName}" />
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.NotifyRestartRequired}" HorizontalAlignment="Right" AutomationProperties.Name="Restart required notifications" />
+                            </Grid>
+                            <Grid>
+                                <TextBlock Text="Update available" Style="{StaticResource SettingName}" />
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.NotifyUpdateAvailable}" HorizontalAlignment="Right" AutomationProperties.Name="Update available notifications" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Appearance}">
+                        <StackPanel>
+                            <TextBlock Text="Theme" Style="{StaticResource SettingName}" />
+                            <TextBlock Text="Choose Horizon's appearance." Style="{StaticResource BodyText}" Margin="0,6,0,16" />
+                            <ComboBox Style="{StaticResource ComboInput}"
+                                      SelectedValue="{Binding Settings.Theme}"
+                                      SelectedValuePath="Content"
+                                      AutomationProperties.Name="Theme">
+                                <ComboBoxItem Content="Dark" />
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Updates}">
+                        <Grid>
+                            <StackPanel Margin="0,0,180,0">
+                                <TextBlock Text="Horizon updates" Style="{StaticResource SettingName}" />
+                                <TextBlock Text="Check the official Horizon release feed for a newer version." Style="{StaticResource BodyText}" Margin="0,5,0,0" />
+                            </StackPanel>
+                            <Button Style="{StaticResource SecondaryButton}" Content="CHECK NOW" Command="{Binding CheckUpdatesCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" AutomationProperties.Name="Check for updates" />
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Privacy}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <StackPanel>
+                                    <TextBlock Text="Diagnostics" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Include anonymous error details when you send a support request." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.Diagnostics}" HorizontalAlignment="Right" AutomationProperties.Name="Share diagnostics" />
+                            </Grid>
+                            <Grid Style="{StaticResource SettingRow}">
+                                <StackPanel>
+                                    <TextBlock Text="Hardware information" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Include basic PC details in support information." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.HardwareInformation}" HorizontalAlignment="Right" AutomationProperties.Name="Include hardware information" />
+                            </Grid>
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Support logs" Style="{StaticResource SettingName}" />
+                                    <TextBlock Text="Let you attach Horizon logs when asking for help." Style="{StaticResource SettingCopy}" />
+                                </StackPanel>
+                                <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.SupportLogs}" HorizontalAlignment="Right" AutomationProperties.Name="Include support logs" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=Advanced}">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="Advanced tweaks" Style="{StaticResource SettingName}" />
+                                <TextBlock Text="Show higher-risk options with an extra confirmation." Style="{StaticResource SettingCopy}" />
+                            </StackPanel>
+                            <ToggleButton Style="{StaticResource SwitchToggle}" IsChecked="{Binding Settings.AdvancedTweaks}" HorizontalAlignment="Right" AutomationProperties.Name="Advanced tweaks" />
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}" Visibility="{Binding Section, Converter={StaticResource EnumToVisibility}, ConverterParameter=About}">
+                        <StackPanel>
+                            <TextBlock Text="HORIZON WINDOWS" Style="{StaticResource Eyebrow}" />
+                            <TextBlock Text="Version 0.1.0" FontSize="22" FontWeight="Bold" Margin="0,14,0,0" />
+                            <TextBlock Text="Performance tools for your Windows PC." Style="{StaticResource BodyText}" Margin="0,8,0,20" />
+                            <Button Style="{StaticResource SecondaryButton}" Content="CHECK FOR UPDATES" Command="{Binding CheckUpdatesCommand}" HorizontalAlignment="Left" AutomationProperties.Name="Check for updates" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

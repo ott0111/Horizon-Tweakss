@@ -1,0 +1,77 @@
+<UserControl x:Class="Horizon.App.Views.ShellView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Horizon.App.Views">
+    <UserControl.Resources>
+        <Style x:Key="NavRadio" TargetType="RadioButton">
+            <Setter Property="Height" Value="40"/><Setter Property="Margin" Value="0,1"/><Setter Property="Padding" Value="14,0"/><Setter Property="Foreground" Value="{StaticResource Brush.TextSecondary}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton"><Border x:Name="Chrome" Background="Transparent" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{StaticResource Brush.Surface}"/></Trigger><Trigger Property="IsChecked" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{StaticResource Brush.Selected}"/><Setter Property="Foreground" Value="{StaticResource Brush.TextPrimary}"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource Brush.App}">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="244"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+        <Border Background="{StaticResource Brush.Sidebar}" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,1,0">
+            <Grid Margin="22,26,20,20"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,24"><Border Width="40" Height="40" Background="#F7F5EE" CornerRadius="11"><Image Source="/Assets/branding/horizon-mark.png" Margin="7"/></Border><TextBlock Text="HORIZON" FontSize="17" FontWeight="Bold" Margin="13,0,0,0" VerticalAlignment="Center"/></StackPanel>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Resources>
+                        <Style TargetType="ScrollBar">
+                            <Setter Property="Width" Value="8" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ScrollBar">
+                                        <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Opacity="0" Focusable="False" />
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb MinHeight="32">
+                                                    <Thumb.Template>
+                                                        <ControlTemplate TargetType="Thumb">
+                                                            <Border Background="{StaticResource Brush.BorderStrong}" CornerRadius="4" />
+                                                        </ControlTemplate>
+                                                    </Thumb.Template>
+                                                </Thumb>
+                                            </Track.Thumb>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Opacity="0" Focusable="False" />
+                                            </Track.IncreaseRepeatButton>
+                                        </Track>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ScrollViewer.Resources>
+                    <ItemsControl ItemsSource="{Binding Groups}"><ItemsControl.ItemTemplate><DataTemplate>
+                        <StackPanel Margin="0,0,0,14"><TextBlock Text="{Binding Title}" Style="{StaticResource Eyebrow}" Margin="0,0,0,8"/><ItemsControl ItemsSource="{Binding Items}"><ItemsControl.ItemTemplate><DataTemplate>
+                            <RadioButton Style="{StaticResource NavRadio}" Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding Destination}" GroupName="MainNav" AutomationProperties.Name="{Binding Label}">
+                                <RadioButton.IsChecked><MultiBinding Converter="{StaticResource EqualityConverter}" Mode="OneWay"><Binding Path="DataContext.SelectedDestination" RelativeSource="{RelativeSource AncestorType=UserControl}"/><Binding Path="Destination"/></MultiBinding></RadioButton.IsChecked>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="{Binding Icon}" FontFamily="{StaticResource Font.Material}" FontSize="19" Width="30" VerticalAlignment="Center"/><TextBlock Text="{Binding Label}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/></StackPanel>
+                            </RadioButton>
+                        </DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel>
+                    </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+                </ScrollViewer>
+                <Button Grid.Row="2" Style="{StaticResource GhostButton}" Height="54" Padding="5,8" HorizontalContentAlignment="Stretch" Command="{Binding NavigateCommand}" CommandParameter="Profile" AutomationProperties.Name="Open profile">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="38" Height="38">
+                            <Ellipse Fill="{StaticResource Brush.Elevated}" Stroke="{StaticResource Brush.BorderStrong}" StrokeThickness="1" />
+                            <TextBlock Text="{Binding Profile.Initials}" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Ellipse><Ellipse.Fill><ImageBrush ImageSource="{Binding Profile.ProviderAvatarUrl}" Stretch="UniformToFill" /></Ellipse.Fill></Ellipse>
+                            <Ellipse><Ellipse.Fill><ImageBrush ImageSource="{Binding Profile.AvatarPath}" Stretch="UniformToFill" /></Ellipse.Fill></Ellipse>
+                        </Grid>
+                        <TextBlock Text="{Binding Profile.DisplayName}" FontSize="13" FontWeight="SemiBold" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        <Grid Grid.Column="1">
+            <local:CachedPageHost Page="{Binding CurrentPage}" AutomationProperties.Name="Current Horizon page"/>
+            <ProgressBar Height="2"
+                         VerticalAlignment="Top"
+                         IsIndeterminate="True"
+                         Foreground="{StaticResource Brush.PrimaryAction}"
+                         Background="Transparent"
+                         Panel.ZIndex="10"
+                         Visibility="{Binding CurrentPage.IsBusy, Converter={StaticResource BooleanToVisibility}}"
+                         AutomationProperties.Name="Loading page"/>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>horizon-mark.ico</ApplicationIcon>
+    <AssemblyName>Horizon</AssemblyName>
+    <RootNamespace>Horizon.App</RootNamespace>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Horizon.Core\Horizon.Core.csproj" />
+    <ProjectReference Include="..\Horizon.Infrastructure\Horizon.Infrastructure.csproj" />
+    <ProjectReference Include="..\Horizon.Tweaks\Horizon.Tweaks.csproj" />
+    <ProjectReference Include="..\Horizon.System\Horizon.System.csproj" />
+    <ProjectReference Include="..\Horizon.Restore\Horizon.Restore.csproj" />
+    <ProjectReference Include="..\Horizon.Services\Horizon.Services.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\assets\branding\horizon-mark.png" Link="Assets\branding\horizon-mark.png" />
+    <Resource Include="..\..\assets\providers\*.png" Link="Assets\providers\%(Filename)%(Extension)" />
+    <Resource Include="..\..\assets\fonts\*.ttf" Link="Assets\fonts\%(Filename)%(Extension)" Condition="Exists('..\..\assets\fonts')" />
+  </ItemGroup>
+</Project>

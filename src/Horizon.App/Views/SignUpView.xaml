@@ -1,0 +1,36 @@
+<UserControl x:Class="Horizon.App.Views.SignUpView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="FormLabel" TargetType="TextBlock" BasedOn="{StaticResource CaptionText}">
+            <Setter Property="Foreground" Value="{StaticResource Brush.TextSecondary}" />
+            <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource Brush.App}">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid MinWidth="900" MinHeight="650">
+                <Border Width="520" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="40,36" Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.BorderStrong}" BorderThickness="1" CornerRadius="20">
+                    <StackPanel>
+                        <Button Style="{StaticResource GhostButton}" MinWidth="0" Height="28" Padding="0" HorizontalAlignment="Left" Command="{Binding BackCommand}" Content="&#x2190;  BACK TO SIGN IN" AutomationProperties.Name="Back to sign in" />
+                        <TextBlock Text="Create your account" FontSize="30" FontWeight="Bold" Margin="0,22,0,0" />
+                        <TextBlock Text="Set up your profile and start personalizing Horizon." Style="{StaticResource BodyText}" Margin="0,7,0,24" TextWrapping="Wrap" />
+                        <TextBlock Text="Display name" Style="{StaticResource FormLabel}" Margin="0,0,0,7" />
+                        <TextBox Style="{StaticResource TextInput}" Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Display name" />
+                        <TextBlock Text="This is how your name appears in Horizon." Style="{StaticResource CaptionText}" Margin="0,6,0,0" />
+                        <TextBlock Text="Email address" Style="{StaticResource FormLabel}" Margin="0,16,0,7" />
+                        <TextBox Style="{StaticResource TextInput}" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Email address" />
+                        <TextBlock Text="Password" Style="{StaticResource FormLabel}" Margin="0,16,0,7" />
+                        <PasswordBox x:Name="SignUpPassword" Style="{StaticResource PasswordInput}" PasswordChanged="SignUpPassword_Changed" AutomationProperties.Name="Password" />
+                        <TextBlock Text="Use at least 10 characters." Style="{StaticResource CaptionText}" Margin="0,6,0,0" />
+                        <TextBlock Text="Confirm password" Style="{StaticResource FormLabel}" Margin="0,16,0,7" />
+                        <PasswordBox x:Name="SignUpConfirmPassword" Style="{StaticResource PasswordInput}" PasswordChanged="SignUpConfirmPassword_Changed" AutomationProperties.Name="Confirm password" />
+                        <Border Visibility="{Binding IsStatusVisible, Converter={StaticResource BooleanToVisibility}}" Background="{StaticResource Brush.Elevated}" BorderBrush="{Binding StatusTone, Converter={StaticResource StatusBrushConverter}}" BorderThickness="3,0,0,0" CornerRadius="6" Padding="12,9" Margin="0,16,0,0">
+                            <StackPanel><TextBlock Text="{Binding StatusTitle}" FontWeight="SemiBold"/><TextBlock Text="{Binding StatusMessage}" Style="{StaticResource CaptionText}" Margin="0,3,0,0" TextWrapping="Wrap"/></StackPanel>
+                        </Border>
+                        <Button Style="{StaticResource PrimaryButton}" Height="48" Content="CREATE ACCOUNT" Command="{Binding CreateCommand}" Margin="0,20,0,0" IsDefault="True" AutomationProperties.Name="Create account" />
+                        <ProgressBar Height="2" IsIndeterminate="True" Foreground="{StaticResource Brush.TextPrimary}" Background="Transparent" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibility}}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

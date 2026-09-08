@@ -1,0 +1,17 @@
+.DS_Store
+*.log
+node_modules/
+.env
+.env.*
+!.env.example
+backend/dist/
+.dotnet/
+.dotnet-home/
+**/bin/
+**/obj/
+.vs/
+.idea/
+artifacts/
+TestResults/
+*.user
+*.suo

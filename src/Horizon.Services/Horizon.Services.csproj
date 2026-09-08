@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net8.0-windows</TargetFramework></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Horizon.Core\Horizon.Core.csproj" />
+    <ProjectReference Include="..\Horizon.Tweaks\Horizon.Tweaks.csproj" />
+    <ProjectReference Include="..\Horizon.System\Horizon.System.csproj" />
+  </ItemGroup>
+</Project>

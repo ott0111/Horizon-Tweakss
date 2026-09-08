@@ -1,0 +1,99 @@
+<UserControl x:Class="Horizon.App.Views.BenchmarkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="BenchmarkStateText" TargetType="TextBlock">
+            <Setter Property="Text" Value="Not run" />
+            <Setter Property="Foreground" Value="{StaticResource Brush.TextSecondary}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding State}" Value="Ready"><Setter Property="Text" Value="Ready" /></DataTrigger>
+                <DataTrigger Binding="{Binding State}" Value="Running"><Setter Property="Text" Value="Running" /></DataTrigger>
+                <DataTrigger Binding="{Binding State}" Value="Complete">
+                    <Setter Property="Text" Value="Complete" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Success}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding State}" Value="Failed">
+                    <Setter Property="Text" Value="Couldn't complete" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Danger}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BenchmarkActionButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Content" Value="RUN BENCHMARK" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding State}" Value="Running"><Setter Property="Content" Value="RUNNING..." /></DataTrigger>
+                <DataTrigger Binding="{Binding State}" Value="Complete"><Setter Property="Content" Value="RUN AGAIN" /></DataTrigger>
+                <DataTrigger Binding="{Binding State}" Value="Failed"><Setter Property="Content" Value="TRY AGAIN" /></DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Style="{StaticResource PageShell}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="{Binding Title}" Style="{StaticResource Heading1}" />
+            <TextBlock Text="Measure performance before and after your changes." Style="{StaticResource BodyText}" Margin="0,8,0,0" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,32,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,18,0" Padding="40">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <StackPanel Visibility="{Binding State, Converter={StaticResource EnumToVisibility}, ConverterParameter=NoData}">
+                            <TextBlock Text="No benchmark yet" FontSize="28" FontWeight="Bold" />
+                            <TextBlock Text="Run a lightweight local benchmark to compare this PC before and after optimization." Style="{StaticResource BodyText}" Margin="0,12,0,0" />
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding State, Converter={StaticResource EnumToVisibility}, ConverterParameter=Running}">
+                            <TextBlock Text="Running benchmark..." FontSize="28" FontWeight="Bold" />
+                            <TextBlock Text="Keep Horizon open while the local performance test completes." Style="{StaticResource BodyText}" Margin="0,12,0,0" />
+                            <ProgressBar Maximum="100" Value="{Binding Progress, Mode=OneWay}" Height="4" Foreground="{StaticResource Brush.TextPrimary}" Background="{StaticResource Brush.Border}" Margin="0,30,0,0" />
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding State, Converter={StaticResource EnumToVisibility}, ConverterParameter=Complete}">
+                            <TextBlock Text="PERFORMANCE SCORE" Style="{StaticResource Eyebrow}" />
+                            <TextBlock Text="{Binding Score}" FontSize="72" FontWeight="Bold" Margin="0,20,0,0" />
+                            <TextBlock Text="Use this score to compare the same PC over time." Style="{StaticResource BodyText}" Margin="0,10,0,0" />
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding State, Converter={StaticResource EnumToVisibility}, ConverterParameter=Failed}">
+                            <TextBlock Text="Benchmark couldn't complete" FontSize="28" FontWeight="Bold" />
+                            <TextBlock Text="Close other demanding apps and try again." Style="{StaticResource BodyText}" Margin="0,12,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Grid.Row="1"
+                            Style="{StaticResource BenchmarkActionButton}"
+                            Command="{Binding RunCommand}"
+                            Margin="0,28,0,0"
+                            HorizontalAlignment="Left"
+                            MinWidth="160"
+                            AutomationProperties.Name="Run performance test" />
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Before you start" Style="{StaticResource Heading2}" />
+                <TextBlock Text="Close games and pause downloads for a more consistent result."
+                           Style="{StaticResource BodyText}"
+                           Margin="0,10,0,0" />
+                <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" Margin="0,28,0,0" Padding="0,24,0,0">
+                    <Grid>
+                        <TextBlock Text="Current status" FontSize="14" FontWeight="SemiBold" />
+                        <TextBlock Style="{StaticResource BenchmarkStateText}" HorizontalAlignment="Right" />
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
